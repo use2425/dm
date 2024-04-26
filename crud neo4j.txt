@@ -1,0 +1,23 @@
+node 
+CREATE (a:Person {name: 'xaz'})
+CREATE (b:College {name: 'zaxx'})
+
+||creating relation ship between nodes||
+match (a:Person),(b:College) where a.name="asaaaa" and b.name="aaaa" create(a)-[:studyin]->(b)
+
+|finding nodes|
+match (a:Person) return a #shows all person in graph view
+match (a:Person) return a.name #shows all person in table form
+
+|updating age|
+match (n:Person) where n.name="aa" set n.name="Vijay"
+
+|finding by age|
+match (a:Person) where a.name="aaa" return a.age #table view
+match (a:Person) where a.name="aaa" return a #node view
+
+|deleting node|
+deleting node requires detaching of relatinoship
+match (a:Person) where a.name="xyz" detach delete a #detaching relationship and deleting the node
+MATCH (n:Person {name: 'aaaa'})-[r:studyin]->() DELETE r #detaching relation ship
+
