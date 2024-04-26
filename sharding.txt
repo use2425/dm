@@ -1,0 +1,58 @@
+## Starting Instances 
+1. Config Server & ReplicaSet
+mongod --configsvr  --port 37017 --replSet config --dbpath C:\MongoDB_Sharding\config1
+mongod --configsvr  --port 37018 --replSet config --dbpath "C:\MongoDB_Sharding\config2"
+
+2. Shard 1 & ReplicaSet
+mongod --shardsvr --port 47017 --replSet shard1 --dbpath C:\MongoDB_Sharding\shard1
+mongod --shardsvr --port 47018 --replSet shard1 --dbpath C:\MongoDB_Sharding\replica1
+
+3. Shard 2 & ReplicaSet
+mongod --shardsvr --port 57017 --replSet shard2 --dbpath C:\MongoDB_Sharding\shard2
+mongod --shardsvr --port 57018 --replSet shard2 --dbpath C:\MongoDB_Sharding\replica2
+
+## Configure ReplicaSet for Each Instances
+
+1. Configure ReplicaSet for ConfigDB
+mongosh --port 37017
+rs.initiate({_id:"config",members:[{_id:0,host:"localhost:37017"},{_id:1,host:"localhost:37018"}]})
+
+2. Configure ReplicaSet for Shard1
+mongosh --port 47017
+rs.initiate({_id:"shard1",members:[{_id:0,host:"localhost:47017"},{_id:1,host:"localhost:47018"}]})
+
+3. Configure ReplicaSet for Shard2
+mongosh --port 57017
+rs.initiate({_id:"shard2",members:[{_id:0,host:"localhost:57017"},{_id:1,host:"localhost:57018"}]})
+
+
+## Starting Mongos (i.e Router Server)
+mongos --configdb config/localhost:37017,localhost:37018 --port 27020
+
+## Connect to Mongos Shell
+
+mongosh --port 27020
+
+### Adding Shards
+sh.addShard("shard1/localhost:47017,localhost:47018")
+sh.addShard("shard2/localhost:57017,localhost:57018")
+
+### Enabling Sharding For a Database
+sh.enableSharding(demo)
+
+### Create Index of Collection 
+db.zip.createIndex({Pincode : 1})
+
+### Sharding Collection using Shard Key
+sh.shardCollection("demo.zip", { Pincode : 1} )
+db.zip.getShardDistribution()
+
+
+#######
+
+sh.splitAt("demo.zip", { Pincode : 200000})
+sh.splitAt("demo.zip", { Pincode : 400000})
+
+sh.moveChunk("demo.zip", { Pincode : 400000}, "shard1")
+sh.moveChunk("demo.zip", { Pincode : 400000}, "shard2")
+db.zip.getShardDistribution()
