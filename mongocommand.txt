@@ -1,0 +1,51 @@
+use newdb
+db.createCollection("Student")
+
+db.student.insert({name:"Hero",age:21)
+
+db.student.insertMany([{name:"shaktiman",age:25},{name:"powerboy",age:50},{name:"ghatkoperhero",age:500}])
+
+db.student.find()
+db.student.find({name:"Hero"})
+
+db.student.find({age:{$lte:21}})
+
+db.student.update({name:"ghatkoperhero"},{$set:{name:"ghatkoperboys",age:5000,city:"kurla"}})
+
+db.student.drop()
+
+db.dropDatabase()
+
+
+#############
+indexing
+#############
+compass se import
+db.ic.findOne()
+ db.ic.find({Category:"Beauty & Hygiene"}).explain("executionStats")
+
+#check for time
+
+db.ic.createIndex({Category:1})
+db.ic.getIndexes()
+
+db.ic.find({Category:"Beauty & Hygiene"}).explain("executionStats")
+
+
+#########################################
+
+mongod --port 27017 --dbpath C:\Replication\primary --replSet rs
+
+mongod --port 27018 --dbpath C:\Replication\replicaset1 --replSet rs
+
+mongod --port 27019 --dbpath C:\Replication\replicaset2 --replSet rs
+
+mongosh --port 27017 
+
+rs.initiate({_id: "rs", members: [{_id: 0, host: "localhost:27017"}, {_id: 1, host: "localhost:27018"}, {_id: 2, host: "localhost:27019"}]})
+
+rs.status()
+
+db.testcollection.insertOne({name: "example"})
+
+#######################################################3
