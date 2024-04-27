@@ -1,0 +1,33 @@
+DATA:
+CREATE (:Person {name: 'Alice', age: 25}),
+       (:Person {name: 'Bob', age: 30}),
+       (:Person {name: 'Charlie', age: 35}),
+       (:Person {name: 'David', age: 40}),
+       (:Person {name: 'Emily', age: 22}),
+       (:Person {name: 'Frank', age: 27}),
+       (:Person {name: 'Grace', age: 33}),
+       (:Person {name: 'Hannah', age: 28}),
+       (:Person {name: 'Ivan', age: 45}),
+       (:Person {name: 'Jack', age: 26})
+CRUD:STEP 1 
+STEP2
+CREATE (:Person {name: 'Eva', age: 29})
+ 
+STEP 3
+MATCH (p:Person)
+RETURN p.name, p.age
+ 
+
+STEP 4
+MATCH (p:Person {name: 'Alice'})
+SET p.age = 26
+ 
+
+STEP 5
+MATCH (p:Person {name: 'Jack'})
+DELETE p
+
+STEP 6
+MATCH (p:Person)
+RETURN p
+
